@@ -2,7 +2,7 @@
 	"name": "sortis",
 	"displayName": "sortis",
 	"description": "Redis client for VS Code",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.42.0"
 	},
@@ -10,7 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.sortis"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
