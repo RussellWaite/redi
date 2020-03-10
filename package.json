@@ -17,17 +17,17 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "redis-ui",
+					"id": "redisUi",
 					"title": "Redis UI",
 					"icon": "media/r.svg"
 				}
 			]
 		},
 		"views": {
-			"redis-ui": [
+			"redisUi": [
 				{
-					"id": "nodeDependencies",
-					"name": "Node Dependencies"
+					"id": "redisServers",
+					"name": "Redis Servers"
 				}
 			]
 		},
@@ -58,5 +58,8 @@
 		"mocha": "^7.0.1",
 		"typescript": "^3.7.5",
 		"vscode-test": "^1.3.0"
+	},
+	"dependencies": {
+		"tedis": "^0.1.12"
 	}
 }
