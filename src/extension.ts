@@ -2,8 +2,9 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-
 import { DepNodeProvider, Dependency } from './nodeDependencies';
+
+import {ServerConfiguration} from './servers';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -25,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 
-	const nodeDependenciesProvider = new DepNodeProvider(vscode.workspace.workspaceFolders?.pop.toString);
+	const nodeDependenciesProvider = new DepNodeProvider(".");
 	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
 	vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
 	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
@@ -46,6 +47,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// // Test View
 	// new TestView(context);
+	let config = new ServerConfiguration(context.globalStoragePath);
+	config.saveConfiguration();
 }
 
 // this method is called when your extension is deactivated

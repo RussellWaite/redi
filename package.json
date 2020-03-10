@@ -2,7 +2,7 @@
 	"name": "sortis",
 	"displayName": "sortis",
 	"description": "Redis client for VS Code",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.42.0"
 	},
@@ -16,14 +16,14 @@
 	"contributes": {
 		"viewsContainers": {
 			"activitybar": [
-			  {
-				"id": "redis-ui",
-				"title": "Redis UI",
-				"icon": "media/dep.svg"
-			  }
+				{
+					"id": "redis-ui",
+					"title": "Redis UI",
+					"icon": "media/r.svg"
+				}
 			]
-		  },
-		  "views": {
+		},
+		"views": {
 			"redis-ui": [
 				{
 					"id": "nodeDependencies",

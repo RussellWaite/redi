@@ -1,8 +1,11 @@
 # sortis README
 
-This is the README for your extension "sortis". After writing up a brief description, we recommend including the following sections.
+A simple redis UI
 
 ## Features
+
+very basic right now
+
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
@@ -63,3 +66,8 @@ Added features X, Y, and Z.
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
+
+## Attribution
+
+View conainer logo for this extension made by Freepik
+<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
