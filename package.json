@@ -17,16 +17,16 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "redisUi",
+					"id": "redisui",
 					"title": "Redis UI",
 					"icon": "media/r.svg"
 				}
 			]
 		},
 		"views": {
-			"redisUi": [
+			"redisui": [
 				{
-					"id": "redisServers",
+					"id": "redisservers",
 					"name": "Redis Servers"
 				}
 			]
