@@ -35,7 +35,6 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 				return Promise.resolve([]);
 			}
 		}
-
 	}
 
 	/**

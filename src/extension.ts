@@ -1,12 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as path from 'path';
-import { DepNodeProvider, Dependency } from './nodeDependencies';
 
 import {ServerConfiguration, PluginConfiguration, RedisConfiguration} from './servers';
 
 import {RedisCommander} from './redisCommander';
+import { RedisServerDataProvider } from './RedisServerDataProvider';
 
 let configuration: PluginConfiguration;
 let redisCommander: RedisCommander;
@@ -14,9 +13,9 @@ let redisCommander: RedisCommander;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Sortis online');
+	console.log('Redi online');
 
-	let disposable = vscode.commands.registerCommand('extension.sortis', () => {
+	let disposable = vscode.commands.registerCommand('extension.redi.test', () => {
 		
 		redisCommander.connectToServer(configuration.servers[0])
 		.then(
@@ -35,104 +34,35 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(reason);
 				vscode.window.showErrorMessage(reason);
 			});
-
-		
 	});
 
 	context.subscriptions.push(disposable);
-
-	const nodeDependenciesProvider = new DepNodeProvider(".");
-	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
-	vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
-	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
-	vscode.commands.registerCommand('nodeDependencies.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
-	vscode.commands.registerCommand('nodeDependencies.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
-	vscode.commands.registerCommand('nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
-
-	configuration = new ServerConfiguration(context.globalStoragePath);
-	redisCommander = new RedisCommander(configuration);
-
-	const redisServerProvider =  new RedisServerDataProvider(configuration);
-	vscode.window.registerTreeDataProvider('redisServers',redisServerProvider);
-	vscode.commands.registerCommand('redisServers.refreshEntry', () => redisServerProvider.refresh());
-	//onView:redisServers
-
-	// const nodeDependenciesProvider = new DepNodeProvider(".");
-	// vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
-	// vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
-	// vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
-	// vscode.commands.registerCommand('nodeDependencies.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
-	// vscode.commands.registerCommand('nodeDependencies.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
-	// vscode.commands.registerCommand('nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
-
+	registerPlaceholderCommand('extension.redi.viewconfig', context);
+	registerPlaceholderCommand('extension.redi.addserver', context);
+	registerPlaceholderCommand('extension.redi.removeserver', context);
+	registerPlaceholderCommand('extension.redi.refreshview', context);
+	registerPlaceholderCommand('extension.redi.removeallkeys', context);
+	
+	// initialise the mess of a setup I've created - TODO: needs major rework, I might have lost the plot whilst creating this... 
+	(async() => {
+		let temp = new ServerConfiguration(context.globalStoragePath);
+		configuration = await temp.readConfiguration();
+		redisCommander = new RedisCommander(configuration);
+	})()
+		.then((data) => {
+			const redisServerProvider =  new RedisServerDataProvider(configuration, redisCommander);
+			vscode.window.registerTreeDataProvider('redisservers', redisServerProvider);
+			vscode.commands.registerCommand('redisservers.refreshEntry', () => redisServerProvider.refresh());
+		});
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
-
-export class RedisServerDataProvider implements vscode.TreeDataProvider<RedisBranch> {
-
-	private serverConf: PluginConfiguration;
-
-	constructor(serverConf: PluginConfiguration) {
-		this.serverConf = serverConf;
-	}
-
-	private _onDidChangeTreeData: vscode.EventEmitter<RedisBranch | undefined> = new vscode.EventEmitter<RedisBranch | undefined>();
-	readonly onDidChangeTreeData: vscode.Event<RedisBranch | undefined> = this._onDidChangeTreeData.event;
-
-	refresh(): void {
-		this._onDidChangeTreeData.fire();
-	}
-
-	getTreeItem(element: RedisBranch): vscode.TreeItem {
-		return element;
-	}
-
-	getChildren(element?: RedisBranch): Thenable<RedisBranch[]> {
-		if(!element) {
-			let rarr = Array<RedisBranch>();
-
-			this.serverConf.servers.map((x) => {
-				rarr.push(
-					new RedisBranch(x.group, x.server, vscode.TreeItemCollapsibleState.None, {
-						command: 'extension.viewAllKeys',
-						title: x.server,
-						arguments: [x.url]
-				}));
-			});
-
-			return Promise.resolve(rarr);
-		}
-		return Promise.resolve([]);
-	}
-}
-
-export class RedisBranch extends vscode.TreeItem {
-
-	constructor(
-		public readonly group: string,
-		public readonly label: string,
-		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-		public readonly command?: vscode.Command
-	) {
-		super(label, collapsibleState);
-	}
-
-	get tooltip(): string {
-		return `${this.label}-${this.group}`;
-	}
-
-	get description(): string {
-		return this.group;
-	}
-
-	iconPath = {
-		light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
-		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
-	};
-
-	contextValue = 'dependency';
-
+function registerPlaceholderCommand (command: string, context: vscode.ExtensionContext) {
+	context.subscriptions.push(
+		vscode.commands.registerCommand(command, () => {
+			vscode.window.showInformationMessage(`Command (placeholder) executed: "${command}"`);
+		})
+	);	
 }

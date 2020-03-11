@@ -1,6 +1,6 @@
 {
-	"name": "sortis",
-	"displayName": "sortis",
+	"name": "redi",
+	"displayName": "redi",
 	"description": "Redis client for VS Code",
 	"version": "0.0.3",
 	"engines": {
@@ -33,8 +33,28 @@
 		},
 		"commands": [
 			{
-				"command": "extension.sortis",
-				"title": "Redis UI"
+				"command": "extension.redi.test",
+				"title": "Redi: Test"
+			},
+			{
+				"command": "extension.redi.viewconfig",
+				"title": "Redi: View Config"
+			},
+			{
+				"command": "extension.redi.addserver",
+				"title": "Redi: Add Server"
+			},
+			{
+				"command": "extension.redi.removeserver",
+				"title": "Redi: Remove Server"
+			},
+			{
+				"command": "extension.redi.refreshview",
+				"title": "Redi: Refresh View"
+			},
+			{
+				"command": "extension.redi.removeallkeys",
+				"title": "Redi: Remove All Keys"
 			}
 		]
 	},

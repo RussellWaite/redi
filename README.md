@@ -1,4 +1,4 @@
-# sortis README
+# redi README
 
 A simple redis UI
 

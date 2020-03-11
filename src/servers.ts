@@ -44,9 +44,10 @@ export class ServerConfiguration {
         let _self = this;
         this.readConfiguration()
             .then(value => { _self.pluginConfig = value; });
+        //console.log(JSON.stringify(this.pluginConfig));
      }
 
-    private async readConfiguration(): Promise<PluginConfiguration> {
+    public async readConfiguration(): Promise<PluginConfiguration> {
         let serversBuffer = await this.readConfigurationFile();
         return JSON.parse( serversBuffer.toString() );
     }
