@@ -1,7 +1,11 @@
 import { PluginConfiguration, RedisConfiguration } from "./servers";
 import { Tedis, TedisPool } from "tedis";
 
-export class RedisCommander {
+interface RediRedis {
+    connectToServer(server: RedisConfiguration): Promise<Tedis>;
+
+}
+export class TedisRediRedis implements RediRedis {
 
     constructor(public config: PluginConfiguration){}
 

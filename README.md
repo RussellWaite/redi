@@ -4,14 +4,13 @@ A simple redis UI
 
 ## Features
 
-very basic right now
+very basic right now, i.e. only 5% of features implented
 
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Image paths are relative to this README file.
 
 For example if there is an image subfolder under your extension project workspace:
 
-\!\[feature X\]\(images/feature-x.png\)
+\!\[tree-view\]\(media/0.0.3.png\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
@@ -32,23 +31,19 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+security concerns for storing of creds
+no edit ability
+poor value view ability
+it's not exactly rapid
+
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+See changelog for historical notes
 
-### 1.0.0
+### [0.0.3]
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+renamed to redi, nav works with multiple servers and can show keys under servers
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -69,5 +64,12 @@ Added features X, Y, and Z.
 
 ## Attribution
 
-View conainer logo for this extension made by Freepik
-<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
+
+>ImageMagick was used to convert svg to png:
+
+``` 
+convert -density 1200 -resize 150x150 r.svg r.png
+```
+
+[Tedis](https://tedis.silkjs.org/) is used to communicate with your redis servers.

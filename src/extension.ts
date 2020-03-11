@@ -4,11 +4,11 @@ import * as vscode from 'vscode';
 
 import {ServerConfiguration, PluginConfiguration, RedisConfiguration} from './servers';
 
-import {RedisCommander} from './redisCommander';
+import {TedisRediRedis} from './TedisRediRedis';
 import { RedisServerDataProvider } from './RedisServerDataProvider';
 
 let configuration: PluginConfiguration;
-let redisCommander: RedisCommander;
+let redisCommander: TedisRediRedis;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 	(async() => {
 		let temp = new ServerConfiguration(context.globalStoragePath);
 		configuration = await temp.readConfiguration();
-		redisCommander = new RedisCommander(configuration);
+		redisCommander = new TedisRediRedis(configuration);
 	})()
 		.then((data) => {
 			const redisServerProvider =  new RedisServerDataProvider(configuration, redisCommander);

@@ -2,7 +2,7 @@
 	"name": "redi",
 	"displayName": "redi",
 	"description": "Redis client for VS Code",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"engines": {
 		"vscode": "^1.42.0"
 	},
@@ -19,7 +19,7 @@
 				{
 					"id": "redisui",
 					"title": "Redis UI",
-					"icon": "media/r.svg"
+					"icon": "media/r.png"
 				}
 			]
 		},
