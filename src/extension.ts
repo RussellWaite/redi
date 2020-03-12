@@ -2,13 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-import {ServerConfiguration, PluginConfiguration, RedisConfiguration} from './servers';
+import {ServerConfiguration} from './servers';
+import { PluginConfiguration } from "./PluginConfiguration";
 
-import {TedisRediRedis} from './TedisRediRedis';
+import {TedisRediRedis as Redis} from './TedisRediRedis';
 import { RedisServerDataProvider } from './RedisServerDataProvider';
 
 let configuration: PluginConfiguration;
-let redisCommander: TedisRediRedis;
+let redisCommander: Redis;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,24 +17,24 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Redi online');
 
 	let disposable = vscode.commands.registerCommand('extension.redi.test', () => {
+		(async() => {
+			try {
+				let server = configuration.servers[0];
+				let _ = await redisCommander.connectToServer(server);
+
+				let data =	await redisCommander.listKeys(server);
 		
-		redisCommander.connectToServer(configuration.servers[0])
-		.then(
-			(rc) => { 
-				redisCommander.listKeys(rc)
-					.then((data) => { 
-						data.map(async (x,_) => {
-							
-							console.log(x);
-							vscode.window.showInformationMessage(x);
-							vscode.window.showInformationMessage((await redisCommander.getValue(rc,x)));
-						});
-					});
-				},
-			(reason) => { 
-				console.log(reason);
-				vscode.window.showErrorMessage(reason);
-			});
+				data.map(async (x,_) => {
+					console.log(x);
+					vscode.window.showInformationMessage(x);
+					vscode.window.showInformationMessage((await redisCommander.getValue(server,x)));
+				});
+			}
+			catch (e) {
+				console.log(e);
+				vscode.window.showErrorMessage(e);
+			}
+		})();
 	});
 
 	context.subscriptions.push(disposable);
@@ -47,17 +48,18 @@ export function activate(context: vscode.ExtensionContext) {
 	(async() => {
 		let temp = new ServerConfiguration(context.globalStoragePath);
 		configuration = await temp.readConfiguration();
-		redisCommander = new TedisRediRedis(configuration);
+		redisCommander = new Redis(configuration);
 	})()
-		.then((data) => {
+		.then(() => {
 			const redisServerProvider =  new RedisServerDataProvider(configuration, redisCommander);
 			vscode.window.registerTreeDataProvider('redisservers', redisServerProvider);
 			vscode.commands.registerCommand('redisservers.refreshEntry', () => redisServerProvider.refresh());
 		});
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	redisCommander.closeAllConnections();
+}
 
 function registerPlaceholderCommand (command: string, context: vscode.ExtensionContext) {
 	context.subscriptions.push(

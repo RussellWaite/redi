@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { PluginConfiguration } from './servers';
+import { PluginConfiguration } from "./PluginConfiguration";
 import { RedisKey } from "./RedisKey";
 import { RedisServer } from "./RedisServer";
 import { TedisRediRedis } from './TedisRediRedis';
@@ -18,84 +18,49 @@ export class RedisServerDataProvider implements vscode.TreeDataProvider<RedisEnt
     refresh(): void {
 		this._onDidChangeTreeData.fire();
 	}
-	getTreeItem(element: RedisServer): vscode.TreeItem {
+    
+    getTreeItem(element: RedisServer): vscode.TreeItem {
 		return element;
     }
+    
     async getChildren(element?: RedisServer): Promise<RedisEntry[]> {
-        return this.getChildren2(element);
-    }
-
-    async getChildren1(element?: RedisServer): Promise<RedisEntry[]> {
 		if (!element) {
-			let rarr = Array<RedisServer>();
-			this.serverConf.servers.map((x) => {
-				rarr.push(new RedisServer(x, vscode.TreeItemCollapsibleState.Collapsed, {
-					command: 'extension.viewAllKeys',
-					title: x.server,
-					arguments: [x.url]
-				}));
-			});
-			return Promise.resolve(rarr);
+			return this.addServersFromConfigToTree();
 		}
 		else {
-            return this.commander.connectToServer(element.config)
-                .then(
-                    async (tedis) => { 
-                        let keys = await this.commander.listKeys(tedis, "*");
-
-                        let rkeys = Array<RedisEntry>();
-            
-                        keys.map(async (x) => {
-                            rkeys.push(
-                                new RedisKey(x, vscode.TreeItemCollapsibleState.None)
-                            );
-                            let value = await this.commander.getValue(tedis,x);
-                            vscode.window.showInformationMessage(`the value of the key ${x} is ${value}`);
-                        });
-
-                        return Promise.resolve(rkeys);
-                    },
-                    (err) => { 
-                        console.log(err);
-                        return Promise.resolve([]);                    
-                    }
-            );
-		}
-    }
-    
-    async getChildren2(element?: RedisServer): Promise<RedisEntry[]> {
-		if (!element) {
-			let rarr = Array<RedisServer>();
-			this.serverConf.servers.map((x) => {
-				rarr.push(new RedisServer(x, vscode.TreeItemCollapsibleState.Collapsed, {
-					command: 'extension.viewAllKeys',
-					title: x.server,
-					arguments: [x.url]
-				}));
-			});
-			return Promise.resolve(rarr);
-		}
-		else {
-            let server = await this.commander.connectToServer(element.config)
-            try {
-                let keys = await this.commander.listKeys(server, "*");
-
-                let rkeys = Array<RedisEntry>();
-    
-                keys.map(async (x) => {
-                    rkeys.push(
-                        new RedisKey(x, vscode.TreeItemCollapsibleState.None)
-                    );
-                    let value = await this.commander.getValue(server,x);
-                    vscode.window.showInformationMessage(`the value of the key ${x} is ${value}`);
-                });
-
-                return Promise.resolve(rkeys);
-            }
-            catch (err) {
-                console.log(err);
-                return Promise.resolve([]);
-            }
+            return await this.addKeysFromServerToTree(this.commander, element);
 		}
 	}
+
+    private addServersFromConfigToTree() {
+        let rarr = Array<RedisServer>();
+        this.serverConf.servers.map((x) => {
+            rarr.push(new RedisServer(x, vscode.TreeItemCollapsibleState.Collapsed, {
+                command: 'extension.viewAllKeys',
+                title: `$(database) ${x.server}`,
+                arguments: [x.host]
+            }));
+        });
+        return Promise.resolve(rarr);
+    }
+
+    private async addKeysFromServerToTree(commander: TedisRediRedis, element: RedisServer) {
+        await commander.connectToServer(element.config);
+        try {
+            let keys = await commander.listKeys(element.config, "*");
+            let rkeys = Array<RedisEntry>();
+
+            keys.map(async (x) => {
+                rkeys.push(new RedisKey(x, vscode.TreeItemCollapsibleState.None));
+                let value = await commander.getValue(element.config, x);
+                vscode.window.showInformationMessage(`the value of the key ${x} is ${value}`);
+            });
+
+            return Promise.resolve(rkeys);
+        }
+        catch (err) {
+            console.log(err);
+            return Promise.resolve([]);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { RedisConfiguration } from './servers';
+import { RedisConfiguration } from "./RedisConfiguration";
 import { RedisEntry } from "./RedisEntry";
 
 export class RedisServer extends RedisEntry {

@@ -1,33 +1,9 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
-
-export interface RedisConfiguration {
-    server: string;
-    group: string;
-    url: string;
-    port: number;
-    password: string;
-}
-
-export interface PluginConfiguration {
-    servers: RedisConfig[];
-}
-
-class RedisConfig {
-    server: string = "";
-    group: string = "dev";
-    url: string = "";
-    port: number = 6379;
-    password: string = "";
-}
-
-class PluginConfig {
-    servers = new Array<RedisConfiguration>();
-
-    constructor( servers: RedisConfiguration[]) {
-        this.servers = servers;
-    }
-}
+import { PluginConfiguration } from './PluginConfiguration';
+import { PluginConfig } from './PluginConfig';
+import { RedisConfiguration } from './RedisConfiguration';
+import { RedisConfig } from './RedisConfig';
 
 export class ServerConfiguration {
 
