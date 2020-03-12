@@ -4,8 +4,14 @@ import { RedisConfiguration } from "./RedisConfiguration";
 import { RedisEntry } from "./RedisEntry";
 
 export class RedisServer extends RedisEntry {
-	constructor(public config: RedisConfiguration, public readonly collapsibleState: vscode.TreeItemCollapsibleState, public readonly command?: vscode.Command) {
+	constructor(
+		public config: RedisConfiguration, 
+		public readonly collapsibleState: vscode.TreeItemCollapsibleState, 
+		public readonly command?: vscode.Command,
+		private context?: vscode.ExtensionContext) {
+
 		super(config.server, collapsibleState);
+		
 	}
 	get tooltip(): string {
 		return `${this.config.server}-${this.config.group}`;
@@ -18,4 +24,8 @@ export class RedisServer extends RedisEntry {
 		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dep.svg')
 	};
 	contextValue = 'redis-server';
+
+	parameterFor(event: string) : any {
+
+	}
 }

@@ -73,3 +73,5 @@ convert -density 1200 -resize 150x150 r.svg r.png
 ```
 
 [Tedis](https://tedis.silkjs.org/) is used to communicate with your redis servers.
+
+Icon made by [Raj Dev](https://freeicons.io/profile/714) from www.freeicons.io

@@ -2,7 +2,7 @@
 	"name": "redi",
 	"displayName": "redi",
 	"description": "Redis client for VS Code",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"engines": {
 		"vscode": "^1.42.0"
 	},
@@ -35,40 +35,57 @@
 			{
 				"command": "extension.redi.test",
 				"title": "Redi: Test",
-				"icon": "media/test.png"
+				"icon": "media/heart.svg"
 			},
 			{
 				"command": "extension.redi.viewconfig",
-				"title": "Redi: View Config"
+				"title": "Redi: View Config",
+				"icon": "media/heart.svg",
+				"category": "dev"
+			},
+			{
+				"command": "extension.redi.viewallkeys",
+				"title": "Redi: View All Keys",
+				"icon": "media/heart.svg"
 			},
 			{
 				"command": "extension.redi.addserver",
 				"title": "Redi: Add Server",
 				"icon": {
-					"light": "media/add.png",
-					"dark": "media/add.png"
-				  }
+					"light": "media/layers.svg",
+					"dark": "media/layers.svg"
+				  },
+				  "icon": "media/heart.svg"
 			},
 			{
 				"command": "extension.redi.removeserver",
 				"title": "Redi: Remove Server",
 				"icon": {
-					"light": "media/remove.png",
-					"dark": "media/remove.png"
-				  }
+					"light": "media/remove.svg",
+					"dark": "media/remove.svg"
+				  },
+				  "icon": "media/heart.svg"
+			},
+			{
+				"command": "extension.redi.removekey",
+				"title": "Redi: Remove Key",
+				"icon": "media/remove.svg",
+				"icon": "media/heart.svg"
 			},
 			{
 				"command": "extension.redi.refreshview",
 				"title": "Redi: Refresh View",
 				"icon": {
-					"light": "media/refresh.png",
-					"dark": "media/refresh.png"
-				  }
+					"light": "media/freeicons.co_refresh_light.svg",
+					"dark": "media/freeicons.co_refresh_dark.svg"
+				  },
+				  "icon": "media/heart.svg"
 			},
 			{
 				"command": "extension.redi.removeallkeys",
 				"title": "Redi: Remove All Keys",
-				"icon": "media/refresh.svg"
+				"icon": "media/refresh.svg",
+				"icon": "media/heart.svg"
 			}
 		],
 		"menus": {
@@ -80,19 +97,41 @@
 			  },
 			  {
 				"command": "extension.redi.addserver",
-				"when": "view == redisservers"
+				"when": "view == redisservers",
+				"group": "navigation"
+			  },
+			  {
+				"command": "extension.redi.removeserver",
+				"when": "view == redisservers",
+				"group": "inline"
 			  }
 			],
 			"view/item/context": [
-			  {
-				"command": "extension.redi.test",
-				"when": "view == redisservers && viewItem == redis-key",
-				"group": "inline"
-			  },
-			  {
-				"command": "extension.redi.removeallkeys",
-				"when": "view == redisservers && viewItem == redis-key"
-			  }
+				{
+					"command": "extension.redi.test",
+					"when": "view == redisservers && viewItem == redis-key",
+					"group": "inline"
+				},
+				{
+					"command": "extension.redi.removekey",
+					"when": "view == redisservers && viewItem == redis-key",
+					"group": "inline"
+				},
+				{
+					"command": "extension.redi.removeallkeys",
+					"when": "view == redisservers && viewItem == redis-server",
+					"group": "inline"
+				},
+				{
+					"command": "extension.redi.viewconfig",
+					"when": "view == redisservers && viewItem == redis-server",
+					"group": "inline"
+				},
+				{
+					"command": "extension.redi.removeallkeys",
+					"when": "view == redisservers && viewItem == redis-server",
+					"group": "inline"
+				}
 			]
 		  }
 	},

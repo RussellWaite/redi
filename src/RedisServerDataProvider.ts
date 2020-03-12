@@ -9,7 +9,8 @@ import { RedisEntry } from './RedisEntry';
 export class RedisServerDataProvider implements vscode.TreeDataProvider<RedisEntry> {
 	constructor(
         private serverConf: PluginConfiguration, 
-        private commander:TedisRediRedis) 
+        private commander:TedisRediRedis,
+        private context: vscode.ExtensionContext) 
     { }
     
     private _onDidChangeTreeData: vscode.EventEmitter<RedisEntry | undefined> = new vscode.EventEmitter<RedisEntry | undefined>();
@@ -35,10 +36,11 @@ export class RedisServerDataProvider implements vscode.TreeDataProvider<RedisEnt
     private addServersFromConfigToTree() {
         let rarr = Array<RedisServer>();
         this.serverConf.servers.map((x) => {
-            rarr.push(new RedisServer(x, vscode.TreeItemCollapsibleState.Collapsed, {
-                command: 'extension.viewAllKeys',
-                title: `$(database) ${x.server}`,
-                arguments: [x.host]
+            rarr.push(new RedisServer(x, vscode.TreeItemCollapsibleState.Collapsed, 
+                {
+                    command: 'extension.redi.viewAllKeys',
+                    title: `$(database) ${x.server}`,
+                    arguments: [x.host]
             }));
         });
         return Promise.resolve(rarr);
@@ -51,9 +53,12 @@ export class RedisServerDataProvider implements vscode.TreeDataProvider<RedisEnt
             let rkeys = Array<RedisEntry>();
 
             keys.map(async (x) => {
-                rkeys.push(new RedisKey(x, vscode.TreeItemCollapsibleState.None));
-                let value = await commander.getValue(element.config, x);
-                vscode.window.showInformationMessage(`the value of the key ${x} is ${value}`);
+                rkeys.push(new RedisKey(x, vscode.TreeItemCollapsibleState.None, 
+                    {
+                        command: 'extension.redi.test',
+                        arguments: [x],
+                        title: 'View Value'
+                }));
             });
 
             return Promise.resolve(rkeys);
