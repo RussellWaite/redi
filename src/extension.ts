@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-import {ServerConfiguration} from './servers';
+import {ServerConfiguration} from './ServerConfiguration';
 import { PluginConfiguration } from "./PluginConfiguration";
 
 import {TedisRediRedis as Redis} from './TedisRediRedis';
@@ -14,7 +14,7 @@ let redisCommander: Redis;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Redi online');
+	console.log('Redi is ready');
 
 	let disposable = vscode.commands.registerCommand('extension.redi.test', () => {
 		(async() => {

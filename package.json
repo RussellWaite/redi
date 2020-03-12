@@ -17,14 +17,14 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "redisui",
+					"id": "rediui",
 					"title": "Redis UI",
 					"icon": "media/r.png"
 				}
 			]
 		},
 		"views": {
-			"redisui": [
+			"rediui": [
 				{
 					"id": "redisservers",
 					"name": "Redis Servers"
@@ -34,7 +34,8 @@
 		"commands": [
 			{
 				"command": "extension.redi.test",
-				"title": "Redi: Test"
+				"title": "Redi: Test",
+				"icon": "media/test.png"
 			},
 			{
 				"command": "extension.redi.viewconfig",
@@ -42,21 +43,58 @@
 			},
 			{
 				"command": "extension.redi.addserver",
-				"title": "Redi: Add Server"
+				"title": "Redi: Add Server",
+				"icon": {
+					"light": "media/add.png",
+					"dark": "media/add.png"
+				  }
 			},
 			{
 				"command": "extension.redi.removeserver",
-				"title": "Redi: Remove Server"
+				"title": "Redi: Remove Server",
+				"icon": {
+					"light": "media/remove.png",
+					"dark": "media/remove.png"
+				  }
 			},
 			{
 				"command": "extension.redi.refreshview",
-				"title": "Redi: Refresh View"
+				"title": "Redi: Refresh View",
+				"icon": {
+					"light": "media/refresh.png",
+					"dark": "media/refresh.png"
+				  }
 			},
 			{
 				"command": "extension.redi.removeallkeys",
-				"title": "Redi: Remove All Keys"
+				"title": "Redi: Remove All Keys",
+				"icon": "media/refresh.svg"
 			}
-		]
+		],
+		"menus": {
+			"view/title": [
+			  {
+				"command": "extension.redi.refreshview",
+				"when": "view == redisservers",
+				"group": "navigation"
+			  },
+			  {
+				"command": "extension.redi.addserver",
+				"when": "view == redisservers"
+			  }
+			],
+			"view/item/context": [
+			  {
+				"command": "extension.redi.test",
+				"when": "view == redisservers && viewItem == redis-key",
+				"group": "inline"
+			  },
+			  {
+				"command": "extension.redi.removeallkeys",
+				"when": "view == redisservers && viewItem == redis-key"
+			  }
+			]
+		  }
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
